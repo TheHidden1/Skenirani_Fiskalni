@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image {
+      flex: 0 0 40%; /* Reduced width */
+      padding: 10px; /* Reduced padding */
+    }
+
+    .image img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .text {
+      flex: 0 0 40%; /* Reduced width */
+      padding: 10px; /* Reduced padding */
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .text h2 {
+      margin-top: 0;
+      font-size: 16px; /* Reduced font size */
+    }
+
+    .text textarea {
+      width: 100%;
+      height: 500px; /* Reduced height */
+      resize: none;
+      font-size: 14px; /* Reduced font size */
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="image">
+    <img th:src="${recepie.getImage()}" alt="Image" />
+  </div>
+  <div class="text">
+    <h2>Expected</h2>
+    <textarea th:text="${recepie.getActual()}"></textarea>
+  </div>
+</div>
+</body>
+</html>

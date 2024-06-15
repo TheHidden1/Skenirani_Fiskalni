@@ -15,14 +15,15 @@ import org.hibernate.annotations.Type;
 public class Recepie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long Id;
+    @Column(length = 8196)
     private String actual;
+    @Column(length = 8196)
     private String expected;
-    @Lob
-    private byte[] image;
+    private String image;
 
-    public  Recepie(String actual, String expected, byte[] image){
+    public  Recepie(String actual, String expected, String image){
         this.actual= actual;
         this.expected= expected;
         this.image = image;

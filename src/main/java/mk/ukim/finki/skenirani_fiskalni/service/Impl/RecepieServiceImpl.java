@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class RecepieServiceImpl implements RecepieService {
@@ -17,5 +18,15 @@ public class RecepieServiceImpl implements RecepieService {
     @Override
     public Recepie uploadImage(String actual, String expected, MultipartFile file) throws IOException {
     return  null;
+    }
+
+    @Override
+    public Optional<Recepie> findById(Long id) {
+        return recepieRepository.findById(id);
+    }
+
+    @Override
+    public void save(Recepie recepie) {
+        recepieRepository.save(recepie);
     }
 }
