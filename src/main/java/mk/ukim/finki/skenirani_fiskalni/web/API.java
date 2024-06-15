@@ -1,5 +1,6 @@
 package mk.ukim.finki.skenirani_fiskalni.web;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
@@ -7,11 +8,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.http.HttpClient;
 
 @RestController
 public class API {
@@ -29,9 +28,11 @@ public class API {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        String pythonApiUrl = "https://0f5c-46-217-147-166.ngrok-free.app/ocr";
+        String pythonApiUrl = "https://f79b-46-217-149-128.ngrok-free.app/ocr";
 
         ResponseEntity<String> response = restTemplate.exchange(pythonApiUrl, HttpMethod.POST, requestEntity, String.class);
+
+
         return ResponseEntity.ok(response.getBody());
     }
 }
