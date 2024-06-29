@@ -5,7 +5,7 @@
     body {
       font-family: Arial, sans-serif;
       background-color: #f2f2f2;
-      margin: 0;
+      margin: 30px 0 0 0;
       padding: 0;
     }
 
@@ -48,11 +48,15 @@
 <body>
 <div class="container">
   <div class="image">
-    <img th:src="${recepie.getImage()}" alt="Image" />
+    <img th:src="${receipt.getImage()}" alt="Image" />
   </div>
   <div class="text">
     <h2>Expected</h2>
-    <textarea th:text="${recepie.getActual()}"></textarea>
+    <form action="/submitReceipt" method="post">
+    <textarea th:text="${receipt.getActual()}" name="actual" id="actual"></textarea>
+      <input type="hidden" th:value="${receipt.getId()}" name="id" id="id" />
+      <input type="submit" value="Submit" />
+    </form>
   </div>
 </div>
 </body>

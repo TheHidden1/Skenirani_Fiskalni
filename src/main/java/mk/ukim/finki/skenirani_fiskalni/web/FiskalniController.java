@@ -1,7 +1,7 @@
 package mk.ukim.finki.skenirani_fiskalni.web;
 
-import mk.ukim.finki.skenirani_fiskalni.models.Recepie;
-import mk.ukim.finki.skenirani_fiskalni.service.RecepieService;
+import mk.ukim.finki.skenirani_fiskalni.models.Receipt;
+import mk.ukim.finki.skenirani_fiskalni.service.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -20,11 +20,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Controller
 public class FiskalniController {
     @Autowired
-    RecepieService recepieService;
+    ReceiptService receiptService;
     @Autowired
     private RestTemplate restTemplate;
     @GetMapping("/")
@@ -32,12 +33,12 @@ public class FiskalniController {
         return "index";
     }
     @GetMapping("/check/{id}")
-    public String index(@PathVariable Long id, Model model) {
-        Recepie recepie = recepieService.findById(id).get();
-        model.addAttribute("recepie", recepie);
+    public String index(@PathVariable UUID id, Model model) {
+        Receipt receipt = receiptService.findById(id).get();
+        model.addAttribute("receipt", receipt);
         return "check";
     }
-    @PostMapping("/uploadRecipe")
+    @PostMapping("/uploadReceipt")
     public String handleFileUpload(@RequestParam("fileUpload") MultipartFile file) throws IOException {
 
         HttpHeaders headers = new HttpHeaders();
@@ -48,15 +49,27 @@ public class FiskalniController {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        String pythonApiUrl = "https://f79b-46-217-149-128.ngrok-free.app/ocr";
+        String pythonApiUrl = "http://127.0.0.1:5000/ocr";
 
         ResponseEntity<String> response = restTemplate.exchange(pythonApiUrl, HttpMethod.POST, requestEntity, String.class);
         File directory = new File("src/main/resources/static/images");
-        Path filePath = Paths.get("src/main/resources/static/images", file.getOriginalFilename());
+        UUID id = UUID.randomUUID();
+        while (receiptService.findById(id).isPresent()) {
+            id = UUID.randomUUID();
+        }
+        String extenstion = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+        String newName = id.toString().replaceAll("-","0") + extenstion;
+        Path filePath = Paths.get("src/main/resources/static/images", newName);
         Files.write(filePath, file.getBytes());
-        Recepie recepie = new Recepie(response.getBody(), response.getBody(), "/images/" + file.getOriginalFilename());
-        recepieService.save(recepie);
-        System.out.println(recepie.toString());
-        return "redirect:/check/" + recepie.getId();
+        Receipt receipt = new Receipt(id ,response.getBody(), response.getBody(), "/images/" + newName);
+        receiptService.save(receipt);
+        return "redirect:/check/" + receipt.getId();
+    }
+    @PostMapping("/submitReceipt")
+    public String submitReceipt(@RequestParam UUID id, @RequestParam String actual) {
+        Receipt receipt = receiptService.findById(id).get();
+        receipt.setActual(actual);
+        receiptService.save(receipt);
+        return "redirect:/";
     }
 }
