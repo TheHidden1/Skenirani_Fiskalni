@@ -58,17 +58,18 @@ public class FiskalniController {
             id = UUID.randomUUID();
         }
         String extenstion = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        String newName = id.toString().replaceAll("-","0") + extenstion;
+        String newName = id + extenstion;
         Path filePath = Paths.get("src/main/resources/static/images", newName);
         Files.write(filePath, file.getBytes());
-        Receipt receipt = new Receipt(id ,response.getBody(), response.getBody(), "/images/" + newName);
+        Receipt receipt = new Receipt(id ,response.getBody(), response.getBody(), "/img/" + newName);
         receiptService.save(receipt);
         return "redirect:/check/" + receipt.getId();
     }
     @PostMapping("/submitReceipt")
-    public String submitReceipt(@RequestParam UUID id, @RequestParam String actual) {
+    public String submitReceipt(@RequestParam UUID id, @RequestParam String expected) {
         Receipt receipt = receiptService.findById(id).get();
-        receipt.setActual(actual);
+        expected = expected.replace("\n", "");
+        receipt.setExpected(expected);
         receiptService.save(receipt);
         return "redirect:/";
     }

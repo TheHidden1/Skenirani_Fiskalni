@@ -53,7 +53,7 @@
   <div class="text">
     <h2>Expected</h2>
     <form action="/submitReceipt" method="post">
-    <textarea th:text="${receipt.getActual()}" name="actual" id="actual"></textarea>
+    <textarea th:text="${receipt.getExpected()}" name="expected" id="expected"></textarea>
       <input type="hidden" th:value="${receipt.getId()}" name="id" id="id" />
       <input type="submit" value="Submit" />
     </form>
