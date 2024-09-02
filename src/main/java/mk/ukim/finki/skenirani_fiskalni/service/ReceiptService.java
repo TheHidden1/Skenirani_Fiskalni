@@ -11,7 +11,6 @@ import java.util.UUID;
 @Service
 public interface ReceiptService {
 
-    public Receipt uploadImage(String actual, String expected, MultipartFile file) throws IOException;
     public Optional<Receipt> findById(UUID id);
     public void save(Receipt receipt);
 }
