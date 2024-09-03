@@ -62,9 +62,6 @@ public class ReceiptController {
 
         String directory = "src/main/resources/static/images";
         UUID id = UUID.randomUUID();
-        while (receiptService.findById(id).isPresent()) {
-            id = UUID.randomUUID();
-        }
 
         String extension = Objects.requireNonNull(file.getOriginalFilename())
                 .substring(file.getOriginalFilename().lastIndexOf("."));
